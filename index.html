@@ -284,6 +284,8 @@
     <!-- SCRIPT INTEGRADO COM API DO RENDER / NEON -->
     <script>
         const API_URL = "https://recepcao.onrender.com";
+        let configuracaoAtual = null;
+        let carregamentoConfiguracao;
 
         function solicitarSenhaAdmin() {
             const senhaDigitada = prompt("Digite a senha de administrador para acessar o painel:");
@@ -294,7 +296,15 @@
             }
         }
 
-        function abrirModalAdmin() {
+        async function abrirModalAdmin() {
+            if (carregamentoConfiguracao) {
+                await carregamentoConfiguracao;
+            }
+            if (!configuracaoAtual) {
+                alert("Não foi possível carregar as configurações do servidor. Tente novamente antes de salvar.");
+                return;
+            }
+
             document.getElementById('inputTituloTopo').value = document.getElementById('tituloTopoAdmin').innerText;
             document.getElementById('inputUrlLogo').value = document.getElementById('logoAdminPreview').getAttribute('src');
             document.getElementById('inputHeroTitle').value = document.getElementById('heroTitle').innerText;
@@ -308,22 +318,47 @@
             document.getElementById('inputTituloSecundario').value = document.getElementById('blocoTituloSecundario').innerText;
             document.getElementById('inputTextoSecundario').value = document.getElementById('blocoTextoSecundario').innerText;
 
-            const f1 = document.getElementById('videoPreview1');
-            if(!f1.classList.contains('hidden')) document.getElementById('inputUrlVideo1').value = f1.src;
-            const f2 = document.getElementById('videoPreview2');
-            if(!f2.classList.contains('hidden')) document.getElementById('inputUrlVideo2').value = f2.src;
-            const f3 = document.getElementById('videoPreview3');
-            if(!f3.classList.contains('hidden')) document.getElementById('inputUrlVideo3').value = f3.src;
-
-            document.getElementById('inputUrlImg1').value = document.getElementById('galeriaImg1').getAttribute('src');
-            document.getElementById('inputUrlImg2').value = document.getElementById('galeriaImg2').getAttribute('src');
-            document.getElementById('inputUrlImg3').value = document.getElementById('galeriaImg3').getAttribute('src');
+            document.getElementById('inputUrlVideo1').value = configuracaoAtual.urlVideo1 || '';
+            document.getElementById('inputUrlVideo2').value = configuracaoAtual.urlVideo2 || '';
+            document.getElementById('inputUrlVideo3').value = configuracaoAtual.urlVideo3 || '';
+            document.getElementById('inputUrlImg1').value = configuracaoAtual.urlImg1 || '';
+            document.getElementById('inputUrlImg2').value = configuracaoAtual.urlImg2 || '';
+            document.getElementById('inputUrlImg3').value = configuracaoAtual.urlImg3 || '';
 
             document.getElementById('modalAdmin').classList.remove('hidden');
         }
 
         function fecharModalAdmin() {
             document.getElementById('modalAdmin').classList.add('hidden');
+        }
+
+        function aplicarImagemGaleria(numero, url, fallback) {
+            const imagem = document.getElementById(`galeriaImg${numero}`);
+            if (!url) {
+                imagem.onerror = null;
+                imagem.src = fallback;
+                return;
+            }
+
+            imagem.dataset.urlConfigurada = url;
+            imagem.dataset.tentouCaminhoRaiz = '';
+            imagem.onerror = () => {
+                const origem = new URL(imagem.dataset.urlConfigurada, window.location.href);
+                const nomeArquivo = origem.pathname.split('/').pop();
+                const caminhoRaiz = `/${nomeArquivo}`;
+
+                if (origem.origin === window.location.origin &&
+                    origem.pathname !== caminhoRaiz &&
+                    imagem.dataset.tentouCaminhoRaiz !== 'true') {
+                    imagem.dataset.tentouCaminhoRaiz = 'true';
+                    imagem.src = caminhoRaiz;
+                    return;
+                }
+
+                imagem.onerror = null;
+                imagem.src = fallback;
+            };
+            imagem.src = url;
         }
 
         async function salvarConfiguracoesAdmin(e) {
@@ -360,7 +395,8 @@
                     fecharModalAdmin();
                     alert('Configurações salvas e atualizadas no banco de dados global com sucesso!');
                 } else {
-                    alert('Erro ao salvar no servidor.');
+                    const detalhe = await response.text();
+                    alert(`Erro ao salvar no servidor: ${detalhe || response.statusText}`);
                 }
             } catch (err) {
                 console.error('Erro de conexão:', err);
@@ -370,6 +406,7 @@
 
         function aplicarConfiguracoes(cfg) {
             if (!cfg) return;
+            configuracaoAtual = { ...configuracaoAtual, ...cfg };
             if (cfg.tituloTopo) document.getElementById('tituloTopoAdmin').innerText = cfg.tituloTopo;
             if (cfg.urlLogo) document.getElementById('logoAdminPreview').src = cfg.urlLogo;
             if (cfg.heroTitle) document.getElementById('heroTitle').innerHTML = cfg.heroTitle;
@@ -383,31 +420,30 @@
             if (cfg.tituloSecundario) document.getElementById('blocoTituloSecundario').innerText = cfg.tituloSecundario;
             if (cfg.textoSecundario) document.getElementById('blocoTextoSecundario').innerText = cfg.textoSecundario;
             
-            if (cfg.urlVideo1) {
-                const iframe = document.getElementById('videoPreview1');
-                const placeholder = document.getElementById('videoPlaceholder1');
-                iframe.src = cfg.urlVideo1;
-                iframe.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-            }
-            if (cfg.urlVideo2) {
-                const iframe = document.getElementById('videoPreview2');
-                const placeholder = document.getElementById('videoPlaceholder2');
-                iframe.src = cfg.urlVideo2;
-                iframe.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-            }
-            if (cfg.urlVideo3) {
-                const iframe = document.getElementById('videoPreview3');
-                const placeholder = document.getElementById('videoPlaceholder3');
-                iframe.src = cfg.urlVideo3;
-                iframe.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-            }
+            [1, 2, 3].forEach((numero) => {
+                const url = cfg[`urlVideo${numero}`] || '';
+                const iframe = document.getElementById(`videoPreview${numero}`);
+                const placeholder = document.getElementById(`videoPlaceholder${numero}`);
+                iframe.src = url;
+                iframe.classList.toggle('hidden', !url);
+                placeholder.classList.toggle('hidden', Boolean(url));
+            });
 
-            if (cfg.urlImg1) document.getElementById('galeriaImg1').src = cfg.urlImg1;
-            if (cfg.urlImg2) document.getElementById('galeriaImg2').src = cfg.urlImg2;
-            if (cfg.urlImg3) document.getElementById('galeriaImg3').src = cfg.urlImg3;
+            aplicarImagemGaleria(
+                1,
+                cfg.urlImg1,
+                'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&auto=format&fit=crop&q=60'
+            );
+            aplicarImagemGaleria(
+                2,
+                cfg.urlImg2,
+                'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&auto=format&fit=crop&q=60'
+            );
+            aplicarImagemGaleria(
+                3,
+                cfg.urlImg3,
+                'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60'
+            );
         }
 
         function resetarConfiguracoes() {
@@ -415,16 +451,19 @@
         }
 
         // CARREGAR DADOS DO BANCO NEON VIA RENDER AO ABRIR A PÁGINA GLOBALMENTE
-        window.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const response = await fetch(`${API_URL}/api/config`);
-                if (response.ok) {
+        window.addEventListener('DOMContentLoaded', () => {
+            carregamentoConfiguracao = (async () => {
+                try {
+                    const response = await fetch(`${API_URL}/api/config`);
+                    if (!response.ok) {
+                        throw new Error(`O servidor respondeu com status ${response.status}.`);
+                    }
                     const data = await response.json();
                     aplicarConfiguracoes(data);
+                } catch (err) {
+                    console.error('Não foi possível carregar as configurações do servidor:', err);
                 }
-            } catch (err) {
-                console.error('Aguardando conexão com o servidor no Render...', err);
-            }
+            })();
         });
     </script>
 </body>
