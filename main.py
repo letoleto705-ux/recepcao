@@ -1,5 +1,4 @@
 import os
-import json
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -8,63 +7,74 @@ from psycopg2.extras import RealDictCursor
 
 app = FastAPI()
 
-# Permitir que a sua página no GitHub Pages acesse este Web Service no Render
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Em produção, você pode trocar "*" pela URL do seu GitHub Pages
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Pega a URL de conexão do Neon através das variáveis de ambiente do Render
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 def get_db_connection():
     if not DATABASE_URL:
-        raise HTTPException(status_code=500, status_code_detail="DATABASE_URL não configurada no ambiente.")
-    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
-    return conn
+        raise HTTPException(status_code=500, detail="DATABASE_URL não configurada no ambiente.")
+    return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
 
-# Cria a tabela de configuração no Neon ao iniciar a aplicação se ela não existir
 def init_db():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
+        # Cria a tabela com colunas dedicadas para Textos, Vídeos e Imagens
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS site_config (
                 id SERIAL PRIMARY KEY,
-                data JSONB NOT NULL
+                titulo_topo TEXT,
+                url_logo TEXT,
+                hero_title TEXT,
+                hero_subtitle TEXT,
+                texto1 TEXT,
+                texto2 TEXT,
+                texto3 TEXT,
+                texto4 TEXT,
+                titulo_secundario TEXT,
+                texto_secundario TEXT,
+                url_video1 TEXT,
+                url_video2 TEXT,
+                url_video3 TEXT,
+                url_img1 TEXT,
+                url_img2 TEXT,
+                url_img3 TEXT
             );
         """)
-        # Insere um registro padrão se a tabela estiver vazia
+        
+        # Insere dados padrão se a tabela estiver vazia
         cursor.execute("SELECT COUNT(*) FROM site_config;")
         count = cursor.fetchone()['count']
         if count == 0:
-            default_config = {
-                "tituloTopo": "TECH STORE",
-                "urlLogo": "/imagens/logo.png",
-                "heroTitle": "Sistema de Comissionamento em Três Níveis",
-                "heroSubtitle": "Construa sua rede de parceiros, escale suas indicações e garanta comissões automáticas de até 10%.",
-                "texto1": "O <strong>Sistema de Comissionamento em Três Níveis</strong> da nossa plataforma representa uma oportunidade extraordinária...",
-                "texto2": "Ao se tornar um afiliado oficial, você desbloqueia o poder...",
-                "texto3": "Quando você entra, ganha um link exclusivo...",
-                "texto4": "Em cada um desses níveis de profundidade...",
-                "tituloSecundario": "Como Funciona na Prática?",
-                "textoSecundario": "Através de ferramentas visuais e materiais de apoio...",
-                "urlVideo1": "",
-                "urlVideo2": "",
-                "urlVideo3": "",
-                "urlImg1": "/imagens/rede.jpg",
-                "urlImg2": "/imagens/detalhe2.jpg",
-                "urlImg3": "/imagens/detalhe3.jpg"
-            }
-            cursor.execute("INSERT INTO site_config (data) VALUES (%s);", (json.dumps(default_config),))
+            cursor.execute("""
+                INSERT INTO site_config (
+                    titulo_topo, url_logo, hero_title, hero_subtitle, 
+                    texto1, texto2, texto3, texto4, 
+                    titulo_secundario, texto_secundario, 
+                    url_video1, url_video2, url_video3, 
+                    url_img1, url_img2, url_img3
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+            """, (
+                "TECH STORE", "/imagens/logo.png", 
+                "Sistema de Comissionamento em Três Níveis", 
+                "Construa sua rede de parceiros, escale suas indicações e garanta comissões automáticas de até 10%.",
+                "O Sistema de Comissionamento em Três Níveis...", "Ao se tornar um afiliado...", "Quando você entra...", "Em cada um desses níveis...",
+                "Como Funciona na Prática?", "Através de ferramentas visuais...",
+                "", "", "", 
+                "/imagens/rede.jpg", "/imagens/detalhe2.jpg", "/imagens/detalhe3.jpg"
+            ))
             conn.commit()
         cursor.close()
         conn.close()
     except Exception as e:
-        print(f"Erro ao inicializar o banco de dados: {e}")
+        print(f"Erro ao inicializar o banco: {e}")
 
 @app.on_event("startup")
 def startup_event():
@@ -93,27 +103,61 @@ def get_config():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT data FROM site_config ORDER BY id DESC LIMIT 1;")
+        cursor.execute("SELECT * FROM site_config ORDER BY id DESC LIMIT 1;")
         row = cursor.fetchone()
         cursor.close()
         conn.close()
         if row:
-            return row['data']
+            # Mapeia as colunas do banco para o formato esperado pelo frontend
+            return {
+                "tituloTopo": row['titulo_topo'],
+                "urlLogo": row['url_logo'],
+                "heroTitle": row['hero_title'],
+                "heroSubtitle": row['hero_subtitle'],
+                "texto1": row['texto1'],
+                "texto2": row['texto2'],
+                "texto3": row['texto3'],
+                "texto4": row['texto4'],
+                "tituloSecundario": row['titulo_secundario'],
+                "textoSecundario": row['texto_secundario'],
+                "urlVideo1": row['url_video1'],
+                "urlVideo2": row['url_video2'],
+                "urlVideo3": row['url_video3'],
+                "urlImg1": row['url_img1'],
+                "urlImg2": row['url_img2'],
+                "urlImg3": row['url_img3'],
+            }
         return {}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/config")
-def save_config(config: ConfigModel):
+def save_config(cfg: ConfigModel):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        # Atualiza ou insere as novas configurações no banco Neon
-        cursor.execute("DELETE FROM site_config;") # Mantém sempre o registro mais recente atualizado
-        cursor.execute("INSERT INTO site_config (data) VALUES (%s);", (json.dumps(config.dict()),))
+        
+        # Limpa registros antigos e mantém sempre a configuração atualizada globalmente
+        cursor.execute("DELETE FROM site_config;")
+        
+        cursor.execute("""
+            INSERT INTO site_config (
+                titulo_topo, url_logo, hero_title, hero_subtitle, 
+                texto1, texto2, texto3, texto4, 
+                titulo_secundario, texto_secundario, 
+                url_video1, url_video2, url_video3, 
+                url_img1, url_img2, url_img3
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+        """, (
+            cfg.tituloTopo, cfg.urlLogo, cfg.heroTitle, cfg.heroSubtitle,
+            cfg.texto1, cfg.texto2, cfg.texto3, cfg.texto4,
+            cfg.tituloSecundario, cfg.textoSecundario,
+            cfg.urlVideo1, cfg.urlVideo2, cfg.urlVideo3,
+            cfg.urlImg1, cfg.urlImg2, cfg.urlImg3
+        ))
         conn.commit()
         cursor.close()
         conn.close()
-        return {"status": "success", "message": "Configurações salvas globalmente com sucesso!"}
+        return {"status": "success", "message": "Configurações de vídeos, imagens e textos atualizadas no Neon!"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
