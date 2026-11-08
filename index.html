@@ -25,7 +25,7 @@
         <div class="max-w-7xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl overflow-hidden shadow-md bg-slate-900 flex items-center justify-center border border-sky-500/30 shrink-0">
-                    <img id="logoAdminPreview" src="/imagens/logo.png" alt="Tech Store Logo" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=60'">
+                    <img id="logoAdminPreview" src="/imagens/logo.png" alt="Tech Store Logo" class="w-full h-full object-cover" onerror="this.style.display='none'">
                 </div>
                 <div class="min-w-0">
                     <h1 id="tituloTopoAdmin" class="font-extrabold text-base sm:text-xl tracking-wide text-slate-900 truncate">TECH STORE</h1>
@@ -130,14 +130,17 @@
                     <p class="text-[11px] sm:text-xs text-slate-500 mt-1">Imagens ilustrativas para facilitar o entendimento do modelo de expansão.</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                    <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
-                        <img id="galeriaImg1" src="/imagens/rede.jpg" alt="Ilustração 1" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&auto=format&fit=crop&q=60'">
+                    <div id="containerImg1" class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
+                        <img id="galeriaImg1" src="" alt="Ilustração 1" class="w-full h-full object-cover hidden">
+                        <div id="galeriaPlaceholder1" class="text-slate-400 text-xs p-4 text-center">Nenhuma imagem configurada</div>
                     </div>
-                    <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
-                        <img id="galeriaImg2" src="/imagens/detalhe2.jpg" alt="Ilustração 2" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&auto=format&fit=crop&q=60'">
+                    <div id="containerImg2" class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
+                        <img id="galeriaImg2" src="" alt="Ilustração 2" class="w-full h-full object-cover hidden">
+                        <div id="galeriaPlaceholder2" class="text-slate-400 text-xs p-4 text-center">Nenhuma imagem configurada</div>
                     </div>
-                    <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
-                        <img id="galeriaImg3" src="/imagens/detalhe3.jpg" alt="Ilustração 3" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60'">
+                    <div id="containerImg3" class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
+                        <img id="galeriaImg3" src="" alt="Ilustração 3" class="w-full h-full object-cover hidden">
+                        <div id="galeriaPlaceholder3" class="text-slate-400 text-xs p-4 text-center">Nenhuma imagem configurada</div>
                     </div>
                 </div>
             </div>
@@ -258,15 +261,15 @@
                 <h4 class="font-bold text-sky-700 uppercase tracking-wider text-[11px]">Imagens Locais (Pasta /imagens)</h4>
                 <div>
                     <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem 1 (ex: /imagens/rede.jpg)</label>
-                    <input type="text" id="inputUrlImg1" value="/imagens/rede.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                    <input type="text" id="inputUrlImg1" placeholder="/imagens/rede.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
                 </div>
                 <div>
                     <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem 2 (ex: /imagens/detalhe2.jpg)</label>
-                    <input type="text" id="inputUrlImg2" value="/imagens/detalhe2.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                    <input type="text" id="inputUrlImg2" placeholder="/imagens/detalhe2.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
                 </div>
                 <div>
                     <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem 3 (ex: /imagens/detalhe3.jpg)</label>
-                    <input type="text" id="inputUrlImg3" value="/imagens/detalhe3.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                    <input type="text" id="inputUrlImg3" placeholder="/imagens/detalhe3.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
                 </div>
 
                 <div class="pt-3 flex flex-col sm:flex-row gap-2.5">
@@ -306,7 +309,7 @@
             }
 
             document.getElementById('inputTituloTopo').value = document.getElementById('tituloTopoAdmin').innerText;
-            document.getElementById('inputUrlLogo').value = document.getElementById('logoAdminPreview').getAttribute('src');
+            document.getElementById('inputUrlLogo').value = document.getElementById('logoAdminPreview').getAttribute('src') || '';
             document.getElementById('inputHeroTitle').value = document.getElementById('heroTitle').innerText;
             document.getElementById('inputHeroSubtitle').value = document.getElementById('heroSubtitle').innerText;
             
@@ -332,32 +335,19 @@
             document.getElementById('modalAdmin').classList.add('hidden');
         }
 
-        function aplicarImagemGaleria(numero, url, fallback) {
+        function aplicarImagemGaleria(numero, url) {
             const imagem = document.getElementById(`galeriaImg${numero}`);
-            if (!url) {
-                imagem.onerror = null;
-                imagem.src = fallback;
+            const placeholder = document.getElementById(`galeriaPlaceholder${numero}`);
+
+            if (!url || url.trim() === "") {
+                imagem.src = "";
+                imagem.classList.add('hidden');
+                if (placeholder) placeholder.classList.remove('hidden');
                 return;
             }
 
-            imagem.dataset.urlConfigurada = url;
-            imagem.dataset.tentouCaminhoRaiz = '';
-            imagem.onerror = () => {
-                const origem = new URL(imagem.dataset.urlConfigurada, window.location.href);
-                const nomeArquivo = origem.pathname.split('/').pop();
-                const caminhoRaiz = `/${nomeArquivo}`;
-
-                if (origem.origin === window.location.origin &&
-                    origem.pathname !== caminhoRaiz &&
-                    imagem.dataset.tentouCaminhoRaiz !== 'true') {
-                    imagem.dataset.tentouCaminhoRaiz = 'true';
-                    imagem.src = caminhoRaiz;
-                    return;
-                }
-
-                imagem.onerror = null;
-                imagem.src = fallback;
-            };
+            if (placeholder) placeholder.classList.add('hidden');
+            imagem.classList.remove('hidden');
             imagem.src = url;
         }
 
@@ -409,7 +399,11 @@
             if (!cfg) return;
             configuracaoAtual = { ...configuracaoAtual, ...cfg };
             if (cfg.tituloTopo) document.getElementById('tituloTopoAdmin').innerText = cfg.tituloTopo;
-            if (cfg.urlLogo) document.getElementById('logoAdminPreview').src = cfg.urlLogo;
+            if (cfg.urlLogo) {
+                const logo = document.getElementById('logoAdminPreview');
+                logo.src = cfg.urlLogo;
+                logo.style.display = cfg.urlLogo ? 'block' : 'none';
+            }
             if (cfg.heroTitle) document.getElementById('heroTitle').innerHTML = cfg.heroTitle;
             if (cfg.heroSubtitle) document.getElementById('heroSubtitle').innerText = cfg.heroSubtitle;
             
@@ -430,21 +424,9 @@
                 placeholder.classList.toggle('hidden', Boolean(url));
             });
 
-            aplicarImagemGaleria(
-                1,
-                cfg.urlImg1,
-                'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&auto=format&fit=crop&q=60'
-            );
-            aplicarImagemGaleria(
-                2,
-                cfg.urlImg2,
-                'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&auto=format&fit=crop&q=60'
-            );
-            aplicarImagemGaleria(
-                3,
-                cfg.urlImg3,
-                'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60'
-            );
+            aplicarImagemGaleria(1, cfg.urlImg1);
+            aplicarImagemGaleria(2, cfg.urlImg2);
+            aplicarImagemGaleria(3, cfg.urlImg3);
         }
 
         function resetarConfiguracoes() {

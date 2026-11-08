@@ -51,29 +51,6 @@ def init_db():
                     );
                 """)
 
-                cursor.execute("""
-                    SELECT column_name
-                    FROM information_schema.columns
-                    WHERE table_schema = current_schema()
-                      AND table_name = 'site_config';
-                """)
-                columns = {row["column_name"] for row in cursor.fetchall()}
-                required_columns = {
-                    "id", "titulo_topo", "url_logo", "hero_title", "hero_subtitle",
-                    "texto1", "texto2", "texto3", "texto4", "titulo_secundario",
-                    "texto_secundario", "url_video1", "url_video2", "url_video3",
-                    "url_img1", "url_img2", "url_img3",
-                }
-                missing_columns = required_columns - columns
-                if missing_columns:
-                    missing = ", ".join(sorted(missing_columns))
-                    raise RuntimeError(
-                        "A tabela site_config existente não corresponde ao esquema "
-                        f"esperado (colunas ausentes: {missing}). No SQL Editor do "
-                        "Neon, execute DROP TABLE IF EXISTS site_config; e reinicie "
-                        "o serviço para recriá-la."
-                    )
-
                 cursor.execute("SELECT COUNT(*) FROM site_config;")
                 count = cursor.fetchone()["count"]
                 if count == 0:
@@ -92,7 +69,7 @@ def init_db():
                         "O Sistema de Comissionamento em Três Níveis...", "Ao se tornar um afiliado...", "Quando você entra...", "Em cada um desses níveis...",
                         "Como Funciona na Prática?", "Através de ferramentas visuais...",
                         "", "", "",
-                        "/imagens/rede.jpg", "/imagens/detalhe2.jpg", "/imagens/detalhe3.jpg"
+                        "", "", ""
                     ))
     finally:
         conn.close()
@@ -119,7 +96,6 @@ class ConfigModel(BaseModel):
     urlImg2: Optional[str] = None
     urlImg3: Optional[str] = None
 
-
 CONFIG_COLUMNS = {
     "tituloTopo": "titulo_topo",
     "urlLogo": "url_logo",
@@ -139,10 +115,9 @@ CONFIG_COLUMNS = {
     "urlImg3": "url_img3",
 }
 
-
 def serialize_config(row):
     return {
-        field: row[column]
+        field: row[column] if row[column] is not None else ""
         for field, column in CONFIG_COLUMNS.items()
     }
 
@@ -166,18 +141,16 @@ def save_config(cfg: ConfigModel):
     try:
         with conn:
             with conn.cursor() as cursor:
-                fields_set = getattr(cfg, "model_fields_set", None)
-                if fields_set is None:
-                    fields_set = cfg.__fields_set__
+                # Pegamos todos os campos enviados no JSON (mesmo que vazios/string vazia)
+                incoming_data = cfg.dict(exclude_unset=True)
 
                 updates = []
                 for field, column in CONFIG_COLUMNS.items():
-                    if field not in fields_set:
-                        continue
-                    value = getattr(cfg, field)
-                    if value is None or (isinstance(value, str) and not value.strip()):
-                        continue
-                    updates.append((column, value))
+                    if field in incoming_data:
+                        value = incoming_data[field]
+                        if value is None:
+                            value = ""
+                        updates.append((column, value))
 
                 cursor.execute(
                     "SELECT id FROM site_config ORDER BY id DESC LIMIT 1 FOR UPDATE;"
@@ -207,7 +180,7 @@ def save_config(cfg: ConfigModel):
                 saved_row = cursor.fetchone()
         return {
             "status": "success",
-            "message": "Configurações de vídeos, imagens e textos atualizadas no Neon!",
+            "message": "Configurações atualizadas com sucesso no Neon!",
             **serialize_config(saved_row),
         }
     finally:
