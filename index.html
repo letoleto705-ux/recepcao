@@ -391,7 +391,8 @@
                 });
 
                 if (response.ok) {
-                    aplicarConfiguracoes(configs);
+                    const savedConfigs = await response.json();
+                    aplicarConfiguracoes(savedConfigs);
                     fecharModalAdmin();
                     alert('Configurações salvas e atualizadas no banco de dados global com sucesso!');
                 } else {
@@ -454,7 +455,9 @@
         window.addEventListener('DOMContentLoaded', () => {
             carregamentoConfiguracao = (async () => {
                 try {
-                    const response = await fetch(`${API_URL}/api/config`);
+                    const response = await fetch(`${API_URL}/api/config`, {
+                        cache: 'no-store'
+                    });
                     if (!response.ok) {
                         throw new Error(`O servidor respondeu com status ${response.status}.`);
                     }

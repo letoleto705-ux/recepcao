@@ -119,6 +119,33 @@ class ConfigModel(BaseModel):
     urlImg2: Optional[str] = None
     urlImg3: Optional[str] = None
 
+
+CONFIG_COLUMNS = {
+    "tituloTopo": "titulo_topo",
+    "urlLogo": "url_logo",
+    "heroTitle": "hero_title",
+    "heroSubtitle": "hero_subtitle",
+    "texto1": "texto1",
+    "texto2": "texto2",
+    "texto3": "texto3",
+    "texto4": "texto4",
+    "tituloSecundario": "titulo_secundario",
+    "textoSecundario": "texto_secundario",
+    "urlVideo1": "url_video1",
+    "urlVideo2": "url_video2",
+    "urlVideo3": "url_video3",
+    "urlImg1": "url_img1",
+    "urlImg2": "url_img2",
+    "urlImg3": "url_img3",
+}
+
+
+def serialize_config(row):
+    return {
+        field: row[column]
+        for field, column in CONFIG_COLUMNS.items()
+    }
+
 @app.get("/api/config")
 def get_config():
     conn = get_db_connection()
@@ -128,24 +155,7 @@ def get_config():
                 cursor.execute("SELECT * FROM site_config ORDER BY id DESC LIMIT 1;")
                 row = cursor.fetchone()
         if row:
-            return {
-                "tituloTopo": row["titulo_topo"],
-                "urlLogo": row["url_logo"],
-                "heroTitle": row["hero_title"],
-                "heroSubtitle": row["hero_subtitle"],
-                "texto1": row["texto1"],
-                "texto2": row["texto2"],
-                "texto3": row["texto3"],
-                "texto4": row["texto4"],
-                "tituloSecundario": row["titulo_secundario"],
-                "textoSecundario": row["texto_secundario"],
-                "urlVideo1": row["url_video1"],
-                "urlVideo2": row["url_video2"],
-                "urlVideo3": row["url_video3"],
-                "urlImg1": row["url_img1"],
-                "urlImg2": row["url_img2"],
-                "urlImg3": row["url_img3"],
-            }
+            return serialize_config(row)
         return {}
     finally:
         conn.close()
@@ -156,22 +166,49 @@ def save_config(cfg: ConfigModel):
     try:
         with conn:
             with conn.cursor() as cursor:
-                cursor.execute("DELETE FROM site_config;")
-                cursor.execute("""
-                    INSERT INTO site_config (
-                        titulo_topo, url_logo, hero_title, hero_subtitle,
-                        texto1, texto2, texto3, texto4,
-                        titulo_secundario, texto_secundario,
-                        url_video1, url_video2, url_video3,
-                        url_img1, url_img2, url_img3
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
-                """, (
-                    cfg.tituloTopo, cfg.urlLogo, cfg.heroTitle, cfg.heroSubtitle,
-                    cfg.texto1, cfg.texto2, cfg.texto3, cfg.texto4,
-                    cfg.tituloSecundario, cfg.textoSecundario,
-                    cfg.urlVideo1, cfg.urlVideo2, cfg.urlVideo3,
-                    cfg.urlImg1, cfg.urlImg2, cfg.urlImg3
-                ))
-        return {"status": "success", "message": "Configurações de vídeos, imagens e textos atualizadas no Neon!"}
+                fields_set = getattr(cfg, "model_fields_set", None)
+                if fields_set is None:
+                    fields_set = cfg.__fields_set__
+
+                updates = []
+                for field, column in CONFIG_COLUMNS.items():
+                    if field not in fields_set:
+                        continue
+                    value = getattr(cfg, field)
+                    if value is None or (isinstance(value, str) and not value.strip()):
+                        continue
+                    updates.append((column, value))
+
+                cursor.execute(
+                    "SELECT id FROM site_config ORDER BY id DESC LIMIT 1 FOR UPDATE;"
+                )
+                row = cursor.fetchone()
+                if not row:
+                    raise HTTPException(
+                        status_code=404,
+                        detail="Nenhuma configuração foi inicializada no banco de dados.",
+                    )
+
+                if updates:
+                    assignments = ", ".join(
+                        f"{column} = %s" for column, _ in updates
+                    )
+                    values = [value for _, value in updates]
+                    values.append(row["id"])
+                    cursor.execute(
+                        f"UPDATE site_config SET {assignments} WHERE id = %s;",
+                        values,
+                    )
+
+                cursor.execute(
+                    "SELECT * FROM site_config WHERE id = %s;",
+                    (row["id"],),
+                )
+                saved_row = cursor.fetchone()
+        return {
+            "status": "success",
+            "message": "Configurações de vídeos, imagens e textos atualizadas no Neon!",
+            **serialize_config(saved_row),
+        }
     finally:
         conn.close()
