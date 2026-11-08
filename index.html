@@ -123,24 +123,17 @@
                 </div>
             </div>
 
-            <!-- GALERIA DE IMAGENS LOCAIS -->
-            <div class="space-y-4 sm:space-y-6">
-                <div class="text-center max-w-xl mx-auto">
+            <!-- IMAGEM ÚNICA CENTRALIZADA -->
+            <div class="space-y-4 sm:space-y-6 max-w-3xl mx-auto">
+                <div class="text-center">
                     <h3 class="text-xl sm:text-2xl font-black text-slate-900">Conheça Nossa Estrutura em Detalhes</h3>
-                    <p class="text-[11px] sm:text-xs text-slate-500 mt-1">Imagens ilustrativas para facilitar o entendimento do modelo de expansão.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-500 mt-1">Imagem ilustrativa do modelo de expansão.</p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                    <div id="containerImg1" class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
-                        <img id="galeriaImg1" src="" alt="Ilustração 1" class="w-full h-full object-cover hidden">
-                        <div id="galeriaPlaceholder1" class="text-slate-400 text-xs p-4 text-center">Nenhuma imagem configurada</div>
-                    </div>
-                    <div id="containerImg2" class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
-                        <img id="galeriaImg2" src="" alt="Ilustração 2" class="w-full h-full object-cover hidden">
-                        <div id="galeriaPlaceholder2" class="text-slate-400 text-xs p-4 text-center">Nenhuma imagem configurada</div>
-                    </div>
-                    <div id="containerImg3" class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
-                        <img id="galeriaImg3" src="" alt="Ilustração 3" class="w-full h-full object-cover hidden">
-                        <div id="galeriaPlaceholder3" class="text-slate-400 text-xs p-4 text-center">Nenhuma imagem configurada</div>
+                <div id="containerImgUnica" class="rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-slate-50 aspect-video flex items-center justify-center">
+                    <img id="galeriaImgUnica" src="" alt="Ilustração da Estrutura" class="w-full h-full object-cover hidden">
+                    <div id="galeriaPlaceholderUnica" class="text-slate-400 text-xs p-6 flex flex-col items-center justify-center space-y-2">
+                        <i class="fa-solid fa-image text-3xl sm:text-4xl text-sky-500"></i>
+                        <span class="text-center">Nenhuma imagem configurada. Adicione o caminho no painel admin.</span>
                     </div>
                 </div>
             </div>
@@ -189,7 +182,7 @@
                 </div>
                 <div>
                     <h3 class="text-base sm:text-lg font-black text-slate-900 leading-tight">Painel Admin (Configuração Protegida)</h3>
-                    <p class="text-[11px] sm:text-xs text-slate-500">Gerencie textos, vídeos e imagens locais globalmente via Render/Neon.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-500">Gerencie textos, vídeos e imagem central globalmente via Render/Neon.</p>
                 </div>
             </div>
 
@@ -243,7 +236,7 @@
                 </div>
 
                 <hr class="my-3 border-slate-200">
-                <h4 class="font-bold text-sky-700 uppercase tracking-wider text-[11px]">Espaços de Múltiplos Vídeos Dispersos</h4>
+                <h4 class="font-bold text-sky-700 uppercase tracking-wider text-[11px]">Vídeos do Sistema</h4>
                 <div>
                     <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Link do Vídeo 1 (YouTube / MP4)</label>
                     <input type="text" id="inputUrlVideo1" placeholder="https://www.youtube.com/embed/..." class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
@@ -258,18 +251,10 @@
                 </div>
 
                 <hr class="my-3 border-slate-200">
-                <h4 class="font-bold text-sky-700 uppercase tracking-wider text-[11px]">Imagens Locais (Pasta /imagens)</h4>
+                <h4 class="font-bold text-sky-700 uppercase tracking-wider text-[11px]">Imagem Central</h4>
                 <div>
-                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem 1 (ex: /imagens/rede.jpg)</label>
-                    <input type="text" id="inputUrlImg1" placeholder="/imagens/rede.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
-                </div>
-                <div>
-                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem 2 (ex: /imagens/detalhe2.jpg)</label>
-                    <input type="text" id="inputUrlImg2" placeholder="/imagens/detalhe2.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
-                </div>
-                <div>
-                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem 3 (ex: /imagens/detalhe3.jpg)</label>
-                    <input type="text" id="inputUrlImg3" placeholder="/imagens/detalhe3.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem Central (ex: /imagens/imagens.jpeg)</label>
+                    <input type="text" id="inputUrlImg1" placeholder="/imagens/imagens.jpeg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
                 </div>
 
                 <div class="pt-3 flex flex-col sm:flex-row gap-2.5">
@@ -325,8 +310,6 @@
             document.getElementById('inputUrlVideo2').value = configuracaoAtual.urlVideo2 || '';
             document.getElementById('inputUrlVideo3').value = configuracaoAtual.urlVideo3 || '';
             document.getElementById('inputUrlImg1').value = configuracaoAtual.urlImg1 || '';
-            document.getElementById('inputUrlImg2').value = configuracaoAtual.urlImg2 || '';
-            document.getElementById('inputUrlImg3').value = configuracaoAtual.urlImg3 || '';
 
             document.getElementById('modalAdmin').classList.remove('hidden');
         }
@@ -335,9 +318,9 @@
             document.getElementById('modalAdmin').classList.add('hidden');
         }
 
-        function aplicarImagemGaleria(numero, url) {
-            const imagem = document.getElementById(`galeriaImg${numero}`);
-            const placeholder = document.getElementById(`galeriaPlaceholder${numero}`);
+        function aplicarImagemUnica(url) {
+            const imagem = document.getElementById('galeriaImgUnica');
+            const placeholder = document.getElementById('galeriaPlaceholderUnica');
 
             if (!url || url.trim() === "") {
                 imagem.src = "";
@@ -369,8 +352,8 @@
                 urlVideo2: document.getElementById('inputUrlVideo2').value,
                 urlVideo3: document.getElementById('inputUrlVideo3').value,
                 urlImg1: document.getElementById('inputUrlImg1').value,
-                urlImg2: document.getElementById('inputUrlImg2').value,
-                urlImg3: document.getElementById('inputUrlImg3').value
+                urlImg2: "",
+                urlImg3: ""
             };
 
             try {
@@ -424,9 +407,7 @@
                 placeholder.classList.toggle('hidden', Boolean(url));
             });
 
-            aplicarImagemGaleria(1, cfg.urlImg1);
-            aplicarImagemGaleria(2, cfg.urlImg2);
-            aplicarImagemGaleria(3, cfg.urlImg3);
+            aplicarImagemUnica(cfg.urlImg1);
         }
 
         function resetarConfiguracoes() {

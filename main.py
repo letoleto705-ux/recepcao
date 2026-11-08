@@ -69,7 +69,7 @@ def init_db():
                         "O Sistema de Comissionamento em Três Níveis...", "Ao se tornar um afiliado...", "Quando você entra...", "Em cada um desses níveis...",
                         "Como Funciona na Prática?", "Através de ferramentas visuais...",
                         "", "", "",
-                        "", "", ""
+                        "/imagens/imagens.jpeg", "", ""
                     ))
     finally:
         conn.close()
@@ -141,7 +141,6 @@ def save_config(cfg: ConfigModel):
     try:
         with conn:
             with conn.cursor() as cursor:
-                # Pegamos todos os campos enviados no JSON (mesmo que vazios/string vazia)
                 incoming_data = cfg.dict(exclude_unset=True)
 
                 updates = []
