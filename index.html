@@ -66,7 +66,7 @@
         <div class="max-w-7xl mx-auto px-4 space-y-12 sm:space-y-16">
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-center">
-                <!-- TEXTOS SEM OS [CITE: 5] -->
+                <!-- TEXTOS -->
                 <div id="textoComissaoContainer" class="space-y-4 sm:space-y-6 text-slate-700 text-xs sm:text-sm lg:text-base leading-relaxed bg-slate-50 p-5 sm:p-8 lg:p-10 rounded-3xl border border-slate-200 shadow-sm">
                     <p id="paragrafo1Comissao">
                         O <strong>Sistema de Comissionamento em Três Níveis</strong> da nossa plataforma representa uma oportunidade extraordinária e altamente lucrativa para quem deseja transformar sua rede de contatos em uma verdadeira máquina de geração de renda passiva.
@@ -82,7 +82,7 @@
                     </p>
                 </div>
 
-                <!-- VÍDEO 1 + BOTÃO EXtra SOLICITADO NO VÍDEO -->
+                <!-- VÍDEO 1 + BOTÃO EXTRA -->
                 <div class="space-y-4 text-center">
                     <div class="rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-slate-900 aspect-video flex items-center justify-center">
                         <iframe id="videoPreview1" src="" class="w-full h-full hidden" allowfullscreen></iframe>
@@ -186,7 +186,7 @@
                 </div>
                 <div>
                     <h3 class="text-base sm:text-lg font-black text-slate-900 leading-tight">Painel Admin (Configuração Protegida)</h3>
-                    <p class="text-[11px] sm:text-xs text-slate-500">Gerencie textos, vídeos e imagens locais com segurança.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-500">Gerencie textos, vídeos e imagens locais globalmente via Render/Neon.</p>
                 </div>
             </div>
 
@@ -271,18 +271,21 @@
 
                 <div class="pt-3 flex flex-col sm:flex-row gap-2.5">
                     <button type="submit" class="w-full sm:flex-1 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold uppercase rounded-xl transition shadow-md active:scale-95">
-                        Salvar e Atualizar Página
+                        Salvar no Servidor Global
                     </button>
                     <button type="button" onclick="resetarConfiguracoes()" class="w-full sm:w-auto px-4 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition active:scale-95">
-                        Restaurar Padrão
+                        Cancelar
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- SCRIPT DE GERENCIAMENTO E SEGURANÇA POR SENHA -->
+    <!-- SCRIPT INTEGRADO COM API DO RENDER / NEON -->
     <script>
+        // Substitua pela URL oficial do seu Web Service no Render assim que fizer o deploy
+        const API_URL = "https://SEU-APP-NO-RENDER.onrender.com";
+
         function solicitarSenhaAdmin() {
             const senhaDigitada = prompt("Digite a senha de administrador para acessar o painel:");
             if (senhaDigitada === "leto8621") {
@@ -324,7 +327,7 @@
             document.getElementById('modalAdmin').classList.add('hidden');
         }
 
-        function salvarConfiguracoesAdmin(e) {
+        async function salvarConfiguracoesAdmin(e) {
             e.preventDefault();
             
             const configs = {
@@ -346,10 +349,24 @@
                 urlImg3: document.getElementById('inputUrlImg3').value
             };
 
-            localStorage.setItem('tech_store_configs_aff_v7', JSON.stringify(configs));
-            aplicarConfiguracoes(configs);
-            fecharModalAdmin();
-            alert('Configurações aplicadas com sucesso!');
+            try {
+                const response = await fetch(`${API_URL}/api/config`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(configs)
+                });
+
+                if (response.ok) {
+                    aplicarConfiguracoes(configs);
+                    fecharModalAdmin();
+                    alert('Configurações salvas e atualizadas no banco de dados global com sucesso!');
+                } else {
+                    alert('Erro ao salvar no servidor.');
+                }
+            } catch (err) {
+                console.error('Erro de conexão:', err);
+                alert('Não foi possível conectar ao servidor no Render. Verifique a URL da API.');
+            }
         }
 
         function aplicarConfiguracoes(cfg) {
@@ -395,25 +412,19 @@
         }
 
         function resetarConfiguracoes() {
-            localStorage.removeItem('tech_store_configs_aff_v7');
-            location.reload();
+            fecharModalAdmin();
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const salvo = localStorage.getItem('tech_store_configs_aff_v7');
-            if (salvo) {
-                try {
-                    aplicarConfiguracoes(JSON.parse(salvo));
-                } catch(err) {
-                    console.error('Erro ao carregar configurações salvas.');
+        // CARREGAR DADOS DO BANCO NEON VIA RENDER AO ABRIR A PÁGINA GLOBALMENTE
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(`${API_URL}/api/config`);
+                if (response.ok) {
+                    const data = await response.json();
+                    aplicarConfiguracoes(data);
                 }
-            } else {
-                document.getElementById('inputTexto1').value = document.getElementById('paragrafo1Comissao').innerHTML.trim();
-                document.getElementById('inputTexto2').value = document.getElementById('paragrafo2Comissao').innerHTML.trim();
-                document.getElementById('inputTexto3').value = document.getElementById('paragrafo3Comissao').innerHTML.trim();
-                document.getElementById('inputTexto4').value = document.getElementById('paragrafo4Comissao').innerHTML.trim();
-                document.getElementById('inputTituloSecundario').value = document.getElementById('blocoTituloSecundario').innerText;
-                document.getElementById('inputTextoSecundario').value = document.getElementById('blocoTextoSecundario').innerText;
+            } catch (err) {
+                console.error('Aguardando conexão com o servidor no Render...', err);
             }
         });
     </script>
