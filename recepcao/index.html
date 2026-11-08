@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Tech Store - Sistema de Afiliados Mobile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .gradient-orange { background: linear-gradient(135deg, #0F172A 0%, #0284C7 100%); }
+        .shadow-orange-glow { box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.28); }
+        .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .tech-gradient-bg { background: linear-gradient(140deg, #0F172A 0%, #1E293B 58%, #0F172A 100%); }
+        button, a { touch-action: manipulation; }
+        input, textarea { font-size: 16px !important; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-white">
+
+    <!-- HEADER OTIMIZADO PARA MOBILE -->
+    <header class="fixed top-0 left-0 w-full z-40 glass-header border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl overflow-hidden shadow-md bg-slate-900 flex items-center justify-center border border-sky-500/30 shrink-0">
+                    <img id="logoAdminPreview" src="/imagens/logo.png" alt="Tech Store Logo" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=60'">
+                </div>
+                <div class="min-w-0">
+                    <h1 id="tituloTopoAdmin" class="font-extrabold text-base sm:text-xl tracking-wide text-slate-900 truncate">TECH STORE</h1>
+                    <p class="text-[9px] sm:text-[10px] text-sky-600 font-bold tracking-wider uppercase -mt-1 truncate">Programa de Afiliados</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button onclick="solicitarSenhaAdmin()" class="rounded-xl border border-sky-200 bg-sky-50 px-3 sm:px-4 py-2 sm:py-2.5 text-xs font-extrabold text-sky-700 hover:bg-sky-100 transition shadow-sm flex items-center gap-1.5 shrink-0">
+                    <i class="fa-solid fa-lock"></i> <span class="hidden xs:inline">Admin</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION RESPONSIVA -->
+    <section class="pt-28 sm:pt-32 pb-12 sm:pb-16 px-4 tech-gradient-bg text-white border-b border-slate-800 text-center">
+        <div class="max-w-4xl mx-auto space-y-4 sm:space-y-6">
+            <span id="heroBadge" class="inline-block px-3.5 py-1 rounded-full bg-sky-500/20 text-sky-300 text-[11px] sm:text-xs font-extrabold uppercase tracking-widest border border-sky-400/30">
+                Oportunidade de Renda Passiva em Rede
+            </span>
+            <h2 id="heroTitle" class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+                Sistema de Comissionamento em <span class="text-sky-400">Três Níveis</span>
+            </h2>
+            <p id="heroSubtitle" class="text-slate-300 text-xs sm:text-base lg:text-lg max-w-xl mx-auto font-normal">
+                Construa sua rede de parceiros, escale suas indicações e garanta comissões automáticas de até 10%.
+            </p>
+            <div class="pt-2 sm:pt-4">
+                <a href="#cadastro" class="inline-block w-full sm:w-auto px-8 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs sm:text-sm uppercase tracking-wider rounded-2xl shadow-xl transition transform active:scale-95 text-center">
+                    <i class="fa-solid fa-user-plus mr-2"></i> Afilie-se Agora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO INFORMATIVA COM TEXTOS E VÍDEO 1 -->
+    <section class="py-10 sm:py-16 bg-white border-b border-slate-200 flex-1">
+        <div class="max-w-7xl mx-auto px-4 space-y-12 sm:space-y-16">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-center">
+                <!-- TEXTOS SEM OS [CITE: 5] -->
+                <div id="textoComissaoContainer" class="space-y-4 sm:space-y-6 text-slate-700 text-xs sm:text-sm lg:text-base leading-relaxed bg-slate-50 p-5 sm:p-8 lg:p-10 rounded-3xl border border-slate-200 shadow-sm">
+                    <p id="paragrafo1Comissao">
+                        O <strong>Sistema de Comissionamento em Três Níveis</strong> da nossa plataforma representa uma oportunidade extraordinária e altamente lucrativa para quem deseja transformar sua rede de contatos em uma verdadeira máquina de geração de renda passiva.
+                    </p>
+                    <p id="paragrafo2Comissao">
+                        Ao se tornar um afiliado oficial, você desbloqueia o poder de construir uma estrutura comercial ramificada, onde o seu crescimento está diretamente conectado ao sucesso das parcerias que você ajuda a desenvolver. O funcionamento é intuitivo, dinâmico e estruturado em uma progressão geométrica de ganhos.
+                    </p>
+                    <p id="paragrafo3Comissao">
+                        Quando você entra, ganha um link exclusivo e passa a cadastrar diretamente novos parceiros sob o seu código. Sempre que essas pessoas realizam vendas diretas, você recebe uma comissão inicial altamente atrativa (Nível 1). Mas a verdadeira revolução do modelo acontece nas camadas seguintes: quando os seus indicados diretos trazem novos membros para a rede (Nível 2), e esses novos membros também expandem suas próprias equipes (Nível 3), o sistema continua recompensando o seu esforço de liderança.
+                    </p>
+                    <p id="paragrafo4Comissao">
+                        Em cada um desses níveis de profundidade, você pode faturar porcentagens expressivas de <strong>até 10%</strong> sobre as transações validadas. É uma engrenagem desenhada sob medida para premiar a meritocracia e a visão empreendedora!
+                    </p>
+                </div>
+
+                <!-- VÍDEO 1 + BOTÃO EXtra SOLICITADO NO VÍDEO -->
+                <div class="space-y-4 text-center">
+                    <div class="rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-slate-900 aspect-video flex items-center justify-center">
+                        <iframe id="videoPreview1" src="" class="w-full h-full hidden" allowfullscreen></iframe>
+                        <div id="videoPlaceholder1" class="text-slate-400 text-xs p-6 flex flex-col items-center justify-center space-y-2">
+                            <i class="fa-solid fa-play-circle text-3xl sm:text-4xl text-sky-500"></i>
+                            <span class="text-center">Vídeo 1 não configurado. Adicione o link no painel admin.</span>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="#cadastro" class="inline-block w-full sm:w-auto px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition">
+                            <i class="fa-solid fa-user-plus mr-2"></i> Afilie-se Agora
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOCO INTERMEDIÁRIO COM VÍDEO 2 E BOTÃO EXTRA -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-center bg-slate-50 p-6 sm:p-10 rounded-3xl border border-slate-200">
+                <div class="space-y-4 text-center order-2 lg:order-1">
+                    <div class="rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-slate-900 aspect-video flex items-center justify-center">
+                        <iframe id="videoPreview2" src="" class="w-full h-full hidden" allowfullscreen></iframe>
+                        <div id="videoPlaceholder2" class="text-slate-400 text-xs p-6 flex flex-col items-center justify-center space-y-2">
+                            <i class="fa-solid fa-play-circle text-3xl sm:text-4xl text-sky-500"></i>
+                            <span class="text-center">Vídeo 2 não configurado. Adicione o link no painel admin.</span>
+                        </div>
+                    </div>
+                    <div>
+                        <a href="#cadastro" class="inline-block w-full sm:w-auto px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition">
+                            <i class="fa-solid fa-user-plus mr-2"></i> Afilie-se Agora
+                        </a>
+                    </div>
+                </div>
+                <div class="space-y-4 order-1 lg:order-2">
+                    <h3 id="blocoTituloSecundario" class="text-xl sm:text-2xl font-black text-slate-900">Como Funciona na Prática?</h3>
+                    <p id="blocoTextoSecundario" class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Através de ferramentas visuais e materiais de apoio em vídeo, demonstramos exatamente o passo a passo para você cadastrar sua primeira linha de indicados e começar a escalar os ganhos estruturados.
+                    </p>
+                </div>
+            </div>
+
+            <!-- GALERIA DE IMAGENS LOCAIS -->
+            <div class="space-y-4 sm:space-y-6">
+                <div class="text-center max-w-xl mx-auto">
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-900">Conheça Nossa Estrutura em Detalhes</h3>
+                    <p class="text-[11px] sm:text-xs text-slate-500 mt-1">Imagens ilustrativas para facilitar o entendimento do modelo de expansão.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                    <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
+                        <img id="galeriaImg1" src="/imagens/rede.jpg" alt="Ilustração 1" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&auto=format&fit=crop&q=60'">
+                    </div>
+                    <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
+                        <img id="galeriaImg2" src="/imagens/detalhe2.jpg" alt="Ilustração 2" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&auto=format&fit=crop&q=60'">
+                    </div>
+                    <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 h-52 sm:h-64 flex items-center justify-center">
+                        <img id="galeriaImg3" src="/imagens/detalhe3.jpg" alt="Ilustração 3" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60'">
+                    </div>
+                </div>
+            </div>
+
+            <!-- VÍDEO 3 -->
+            <div class="space-y-4 text-center max-w-3xl mx-auto bg-slate-900 text-white p-6 sm:p-10 rounded-3xl shadow-xl">
+                <h3 class="text-xl sm:text-2xl font-black">Mensagem Final da Liderança</h3>
+                <p class="text-xs sm:text-sm text-slate-300">Assista ao último vídeo e entenda por que este é o momento ideal para iniciar.</p>
+                <div class="rounded-2xl overflow-hidden border border-white/20 shadow-lg bg-slate-800 aspect-video flex items-center justify-center">
+                    <iframe id="videoPreview3" src="" class="w-full h-full hidden" allowfullscreen></iframe>
+                    <div id="videoPlaceholder3" class="text-slate-400 text-xs p-6 flex flex-col items-center justify-center space-y-2">
+                        <i class="fa-solid fa-play-circle text-3xl sm:text-4xl text-sky-500"></i>
+                        <span class="text-center">Vídeo 3 não configurado. Adicione o link no painel admin.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHAMADA FINAL -->
+            <div id="cadastro" class="bg-gradient-to-r from-slate-900 to-sky-900 rounded-3xl p-6 sm:p-10 lg:p-12 text-center text-white space-y-4 sm:space-y-6 shadow-2xl">
+                <h3 class="text-xl sm:text-3xl lg:text-4xl font-black">Pronto para construir sua liberdade financeira?</h3>
+                <p class="text-slate-300 text-xs sm:text-sm lg:text-base max-w-lg mx-auto">Junte-se à nossa rede de parceiros de elite e comece a faturar com comissões de até três níveis de profundidade.</p>
+                <div>
+                    <button onclick="alert('Redirecionando para o cadastro de afiliado...')" class="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs sm:text-sm uppercase tracking-wider rounded-2xl shadow-xl transition transform active:scale-95">
+                        <i class="fa-solid fa-handshake mr-2"></i> Afilie-se Agora (Gratuito)
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-white border-t border-slate-200 py-6 sm:py-8 text-center text-[11px] sm:text-xs text-slate-500 px-4">
+        <p>&copy; 2026 Tech Store - Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- POP-UP / PAINEL ADMIN COM PROTEÇÃO POR SENHA -->
+    <div id="modalAdmin" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-3xl w-full p-5 sm:p-8 shadow-2xl border border-slate-200 relative my-auto">
+            <button onclick="fecharModalAdmin()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-lg sm:text-xl font-bold p-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-5 pr-8">
+                <div class="w-10 h-10 rounded-xl bg-sky-600 text-white flex items-center justify-center font-bold shrink-0">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+                <div>
+                    <h3 class="text-base sm:text-lg font-black text-slate-900 leading-tight">Painel Admin (Configuração Protegida)</h3>
+                    <p class="text-[11px] sm:text-xs text-slate-500">Gerencie textos, vídeos e imagens locais com segurança.</p>
+                </div>
+            </div>
+
+            <!-- FORMULÁRIO -->
+            <form onsubmit="salvarConfiguracoesAdmin(event)" class="space-y-3 sm:space-y-4 text-xs font-semibold text-slate-700 max-h-[70vh] overflow-y-auto pr-1">
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Título Principal do Topo (Logo)</label>
+                    <input type="text" id="inputTituloTopo" value="TECH STORE" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Logo (ex: /imagens/logo.png)</label>
+                    <input type="text" id="inputUrlLogo" value="/imagens/logo.png" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Título do Hero (Banner Principal)</label>
+                    <input type="text" id="inputHeroTitle" value="Sistema de Comissionamento em Três Níveis" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Subtítulo do Hero</label>
+                    <textarea id="inputHeroSubtitle" rows="2" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">Construa sua rede de parceiros, escale suas indicações e garanta comissões automáticas de até 10%.</textarea>
+                </div>
+                
+                <hr class="my-3 border-slate-200">
+                <h4 class="font-bold text-sky-700 uppercase tracking-wider text-[11px]">Espaços de Texto Informativo (Separados)</h4>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Espaço 1 (Parágrafo 1)</label>
+                    <textarea id="inputTexto1" rows="3" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500"></textarea>
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Espaço 2 (Parágrafo 2)</label>
+                    <textarea id="inputTexto2" rows="3" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500"></textarea>
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Espaço 3 (Parágrafo 3)</label>
+                    <textarea id="inputTexto3" rows="3" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500"></textarea>
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Espaço 4 (Parágrafo 4)</label>
+                    <textarea id="inputTexto4" rows="3" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500"></textarea>
+                </div>
+
+                <hr class="my-3 border-slate-200">
+                <h4 class="font-bold text-sky-700 uppercase tracking-wider text-[11px]">Seção Secundária (Título e Texto ao Lado do Vídeo 2)</h4>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Título da Seção Secundária</label>
+                    <input type="text" id="inputTituloSecundario" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Texto da Seção Secundária</label>
+                    <textarea id="inputTextoSecundario" rows="3" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500"></textarea>
+                </div>
+
+                <hr class="my-3 border-slate-200">
+                <h4 class="font-bold text-sky-700 uppercase tracking-wider text-[11px]">Espaços de Múltiplos Vídeos Dispersos</h4>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Link do Vídeo 1 (YouTube / MP4)</label>
+                    <input type="text" id="inputUrlVideo1" placeholder="https://www.youtube.com/embed/..." class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Link do Vídeo 2 (YouTube / MP4)</label>
+                    <input type="text" id="inputUrlVideo2" placeholder="https://www.youtube.com/embed/..." class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Link do Vídeo 3 (YouTube / MP4)</label>
+                    <input type="text" id="inputUrlVideo3" placeholder="https://www.youtube.com/embed/..." class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+
+                <hr class="my-3 border-slate-200">
+                <h4 class="font-bold text-sky-700 uppercase tracking-wider text-[11px]">Imagens Locais (Pasta /imagens)</h4>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem 1 (ex: /imagens/rede.jpg)</label>
+                    <input type="text" id="inputUrlImg1" value="/imagens/rede.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem 2 (ex: /imagens/detalhe2.jpg)</label>
+                    <input type="text" id="inputUrlImg2" value="/imagens/detalhe2.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block mb-1 uppercase text-[10px] sm:text-xs text-slate-500">Caminho da Imagem 3 (ex: /imagens/detalhe3.jpg)</label>
+                    <input type="text" id="inputUrlImg3" value="/imagens/detalhe3.jpg" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 outline-none focus:border-sky-500">
+                </div>
+
+                <div class="pt-3 flex flex-col sm:flex-row gap-2.5">
+                    <button type="submit" class="w-full sm:flex-1 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold uppercase rounded-xl transition shadow-md active:scale-95">
+                        Salvar e Atualizar Página
+                    </button>
+                    <button type="button" onclick="resetarConfiguracoes()" class="w-full sm:w-auto px-4 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition active:scale-95">
+                        Restaurar Padrão
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE GERENCIAMENTO E SEGURANÇA POR SENHA -->
+    <script>
+        function solicitarSenhaAdmin() {
+            const senhaDigitada = prompt("Digite a senha de administrador para acessar o painel:");
+            if (senhaDigitada === "leto8621") {
+                abrirModalAdmin();
+            } else if (senhaDigitada !== null) {
+                alert("Senha incorreta! Acesso negado.");
+            }
+        }
+
+        function abrirModalAdmin() {
+            document.getElementById('inputTituloTopo').value = document.getElementById('tituloTopoAdmin').innerText;
+            document.getElementById('inputUrlLogo').value = document.getElementById('logoAdminPreview').getAttribute('src');
+            document.getElementById('inputHeroTitle').value = document.getElementById('heroTitle').innerText;
+            document.getElementById('inputHeroSubtitle').value = document.getElementById('heroSubtitle').innerText;
+            
+            document.getElementById('inputTexto1').value = document.getElementById('paragrafo1Comissao').innerHTML.trim();
+            document.getElementById('inputTexto2').value = document.getElementById('paragrafo2Comissao').innerHTML.trim();
+            document.getElementById('inputTexto3').value = document.getElementById('paragrafo3Comissao').innerHTML.trim();
+            document.getElementById('inputTexto4').value = document.getElementById('paragrafo4Comissao').innerHTML.trim();
+            
+            document.getElementById('inputTituloSecundario').value = document.getElementById('blocoTituloSecundario').innerText;
+            document.getElementById('inputTextoSecundario').value = document.getElementById('blocoTextoSecundario').innerText;
+
+            const f1 = document.getElementById('videoPreview1');
+            if(!f1.classList.contains('hidden')) document.getElementById('inputUrlVideo1').value = f1.src;
+            const f2 = document.getElementById('videoPreview2');
+            if(!f2.classList.contains('hidden')) document.getElementById('inputUrlVideo2').value = f2.src;
+            const f3 = document.getElementById('videoPreview3');
+            if(!f3.classList.contains('hidden')) document.getElementById('inputUrlVideo3').value = f3.src;
+
+            document.getElementById('inputUrlImg1').value = document.getElementById('galeriaImg1').getAttribute('src');
+            document.getElementById('inputUrlImg2').value = document.getElementById('galeriaImg2').getAttribute('src');
+            document.getElementById('inputUrlImg3').value = document.getElementById('galeriaImg3').getAttribute('src');
+
+            document.getElementById('modalAdmin').classList.remove('hidden');
+        }
+
+        function fecharModalAdmin() {
+            document.getElementById('modalAdmin').classList.add('hidden');
+        }
+
+        function salvarConfiguracoesAdmin(e) {
+            e.preventDefault();
+            
+            const configs = {
+                tituloTopo: document.getElementById('inputTituloTopo').value,
+                urlLogo: document.getElementById('inputUrlLogo').value,
+                heroTitle: document.getElementById('inputHeroTitle').value,
+                heroSubtitle: document.getElementById('inputHeroSubtitle').value,
+                texto1: document.getElementById('inputTexto1').value,
+                texto2: document.getElementById('inputTexto2').value,
+                texto3: document.getElementById('inputTexto3').value,
+                texto4: document.getElementById('inputTexto4').value,
+                tituloSecundario: document.getElementById('inputTituloSecundario').value,
+                textoSecundario: document.getElementById('inputTextoSecundario').value,
+                urlVideo1: document.getElementById('inputUrlVideo1').value,
+                urlVideo2: document.getElementById('inputUrlVideo2').value,
+                urlVideo3: document.getElementById('inputUrlVideo3').value,
+                urlImg1: document.getElementById('inputUrlImg1').value,
+                urlImg2: document.getElementById('inputUrlImg2').value,
+                urlImg3: document.getElementById('inputUrlImg3').value
+            };
+
+            localStorage.setItem('tech_store_configs_aff_v7', JSON.stringify(configs));
+            aplicarConfiguracoes(configs);
+            fecharModalAdmin();
+            alert('Configurações aplicadas com sucesso!');
+        }
+
+        function aplicarConfiguracoes(cfg) {
+            if (!cfg) return;
+            if (cfg.tituloTopo) document.getElementById('tituloTopoAdmin').innerText = cfg.tituloTopo;
+            if (cfg.urlLogo) document.getElementById('logoAdminPreview').src = cfg.urlLogo;
+            if (cfg.heroTitle) document.getElementById('heroTitle').innerHTML = cfg.heroTitle;
+            if (cfg.heroSubtitle) document.getElementById('heroSubtitle').innerText = cfg.heroSubtitle;
+            
+            if (cfg.texto1) document.getElementById('paragrafo1Comissao').innerHTML = cfg.texto1;
+            if (cfg.texto2) document.getElementById('paragrafo2Comissao').innerHTML = cfg.texto2;
+            if (cfg.texto3) document.getElementById('paragrafo3Comissao').innerHTML = cfg.texto3;
+            if (cfg.texto4) document.getElementById('paragrafo4Comissao').innerHTML = cfg.texto4;
+
+            if (cfg.tituloSecundario) document.getElementById('blocoTituloSecundario').innerText = cfg.tituloSecundario;
+            if (cfg.textoSecundario) document.getElementById('blocoTextoSecundario').innerText = cfg.textoSecundario;
+            
+            if (cfg.urlVideo1) {
+                const iframe = document.getElementById('videoPreview1');
+                const placeholder = document.getElementById('videoPlaceholder1');
+                iframe.src = cfg.urlVideo1;
+                iframe.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            }
+            if (cfg.urlVideo2) {
+                const iframe = document.getElementById('videoPreview2');
+                const placeholder = document.getElementById('videoPlaceholder2');
+                iframe.src = cfg.urlVideo2;
+                iframe.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            }
+            if (cfg.urlVideo3) {
+                const iframe = document.getElementById('videoPreview3');
+                const placeholder = document.getElementById('videoPlaceholder3');
+                iframe.src = cfg.urlVideo3;
+                iframe.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            }
+
+            if (cfg.urlImg1) document.getElementById('galeriaImg1').src = cfg.urlImg1;
+            if (cfg.urlImg2) document.getElementById('galeriaImg2').src = cfg.urlImg2;
+            if (cfg.urlImg3) document.getElementById('galeriaImg3').src = cfg.urlImg3;
+        }
+
+        function resetarConfiguracoes() {
+            localStorage.removeItem('tech_store_configs_aff_v7');
+            location.reload();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const salvo = localStorage.getItem('tech_store_configs_aff_v7');
+            if (salvo) {
+                try {
+                    aplicarConfiguracoes(JSON.parse(salvo));
+                } catch(err) {
+                    console.error('Erro ao carregar configurações salvas.');
+                }
+            } else {
+                document.getElementById('inputTexto1').value = document.getElementById('paragrafo1Comissao').innerHTML.trim();
+                document.getElementById('inputTexto2').value = document.getElementById('paragrafo2Comissao').innerHTML.trim();
+                document.getElementById('inputTexto3').value = document.getElementById('paragrafo3Comissao').innerHTML.trim();
+                document.getElementById('inputTexto4').value = document.getElementById('paragrafo4Comissao').innerHTML.trim();
+                document.getElementById('inputTituloSecundario').value = document.getElementById('blocoTituloSecundario').innerText;
+                document.getElementById('inputTextoSecundario').value = document.getElementById('blocoTextoSecundario').innerText;
+            }
+        });
+    </script>
+</body>
+</html>
